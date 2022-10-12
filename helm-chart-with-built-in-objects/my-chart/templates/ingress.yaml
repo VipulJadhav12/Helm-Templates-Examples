@@ -2,6 +2,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  # Values passed into the template from the values.yaml file and/or from user-supplied files.
+  # By default, Values is empty.
   name: {{ .Values.ingress.name }}
   namespace: "{{ .Values.config.namespace }}"
   labels:

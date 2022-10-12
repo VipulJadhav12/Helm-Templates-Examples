@@ -27,8 +27,11 @@ spec:
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
+      # Values passed into the template from the values.yaml file and/or from user-supplied files.
+      # By default, Values is empty.
       serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
+        # Chart.Name: The chart name
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}

@@ -14,6 +14,8 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  # Values passed into the template from the values.yaml file and/or from user-supplied files.
+  # By default, Values is empty.
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
