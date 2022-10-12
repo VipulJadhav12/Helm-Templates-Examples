@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -6,6 +7,10 @@ metadata:
   labels:
     app: my-app
     chart: my-chart
+    # Release is one of the top-level objects that you can access in your templates.
+    # Release object contains several objects like:
+    # Release.Name: The release name
+    # Release.Service: The service that is rendering the present template. On Helm, this is always Helm.
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
