@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: "{{ .Values.config.namespace }}"
+  labels:
+    app: my-springboot-helloworld-app
+    chart: my-chart
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  # Ingress backed by a single service with default backend and no rules.
+  defaultBackend:
+    service:
+      name: my-service
+      port:
+        number: {{ .Values.service.port }}

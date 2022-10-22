@@ -1,0 +1,32 @@
+replicaCount: 1
+
+image:
+  repository: "<remote-repository-url>"
+  tag: "<tag>"
+  pullPolicy: "Always"
+  initContainer:
+    repository: "<remote-repository-url>"
+    tag: "<tag>"
+    pullPolicy: "Always"
+
+config:
+  namespace: "my-namespace"
+  serviceAccount: "my-service-account-name"
+
+  mountFolder: "/some/directory/path"
+  logPath: "/some/directory/path"
+  configPath: "/some/directory/path"
+  secretsPath: "/some/directory/path"
+
+  environment: qa
+  hostname: qa-hostname
+  domain: qa
+
+dbConfig:
+  dbUrl: jdbc:mysql://qa.host:3306/mydb
+  dbUsername: qa-user
+
+# Service level configuration pointing towards the local port of container(s) inside Pod(s).
+service:
+  type: ClusterIP | NodePort
+  port: 8082

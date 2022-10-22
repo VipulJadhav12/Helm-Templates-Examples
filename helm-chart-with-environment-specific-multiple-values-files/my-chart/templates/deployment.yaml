@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  namespace: "{{ .Values.config.namespace }}"
+  labels:
+    app: my-springboot-helloworld-app
+    chart: my-chart
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: my-springboot-helloworld-app
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: my-springboot-helloworld-app
+        chart: my-chart
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      serviceAccount: {{ .Values.config.serviceAccount }}
+      volumes:
+        - name: workdir
+          emptyDir: {}
+        - name: logsdir
+          emptyDir: {}
+        - name: config
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: my-configmap
+        - name: secret-config
+          secret:
+            secretName: my-secret
+      initContainers:
+        # Init container
+        - name: my-init-container
+          image: "{{ .Values.image.initContainer.repository }}:{{ .Values.image.initContainer.tag }}"
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: workdir
+              mountPath: {{ .Values.config.mountFolder }}
+            - name: config
+              mountPath: {{ .Values.config.configPath }}
+      containers:
+        # Main application container
+        - name: my-app-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          env:
+            - name: "environment"
+              value: "{{ .Values.config.environment }}"
+            - name: "domain"
+              value: "{{ .Values.config.domain }}"
+          volumeMounts:
+            - name: workdir
+              mountPath: {{ .Values.config.mountFolder }}
+            - name: logsdir
+              mountPath: {{ .Values.config.logPath }}
+            - name: config
+              mountPath: {{ .Values.config.configPath }}
+            - name: my-secret
+              mountPath: {{ .Values.config.secretsPath }}
+              readOnly: true
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 60
+            httpGet:
+              path: /some/health/check/path
+              port: {{ .Values.service.port }}
+          resources:
+            requests:
+            cpu: 1m
+            memory: 650Mi
+            ephemeral-storage: 2Gi
