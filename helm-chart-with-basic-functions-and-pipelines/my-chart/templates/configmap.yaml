@@ -10,6 +10,10 @@ metadata:
     heritage: {{ .Release.Service }}
 data:
   # Using pipeline, chaining several functions together
+  # default: specify a default value inside of the template, in case the value is omitted in values.yaml file
+  # quote: will add quotation marks to the given string value
+  # repeat: will echo the given string the given number of times
+  # upper: will transform the given string into UPPER_CASE
   game.properties: |
     my.favourite.sport={{ .Values.favourite.sport | quote }}
     my.favourite.club={{ .Values.favourite.club | upper | quote }}
