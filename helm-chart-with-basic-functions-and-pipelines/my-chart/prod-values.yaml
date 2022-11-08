@@ -1,0 +1,34 @@
+replicaCount: 1
+
+image:
+  repository: "<REMOTE-REPOSITORY-URL>"
+  tag: "<TAG>"
+  pullPolicy: "Always"
+  initContainer:
+    repository: "<remote-repository-url>"
+    tag: "<tag>"
+    pullPolicy: "Always"
+
+config:
+  namespace: "my-namespace"
+  serviceAccount: "my-service-account-name"
+
+  mountFolder: "/some/directory/path"
+  logPath: "/some/log-directory/path"
+  configPath: "/some/config-directory/path"
+  secretsPath: "/some/directory/path"
+
+  environment: production
+  hostname: production-hostname
+  domain: production
+
+favourite:
+  sport: Football
+  club: Chelsea
+  #location: UK
+  slogan: Chelseaaa...
+
+# Service level configuration pointing towards the local port of container(s) inside Pod(s).
+service:
+  type: ClusterIP | NodePort
+  port: 5656
